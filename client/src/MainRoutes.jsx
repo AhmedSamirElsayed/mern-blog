@@ -13,8 +13,8 @@ const MainRoutes = () => {
       <Route path="/" element={<HomePage />} />
       <Route path="/about" element={<AboutPage />} />
       <Route path="/dashboard" element={<DashboardPage />} />
-      <Route path="/singin" element={<SigninPage />} />
-      <Route path="/singup" element={<SignUpPage />} />
+      <Route path="/signin" element={<SigninPage />} />
+      <Route path="/signup" element={<SignUpPage />} />
       <Route path="/projects" element={<Projectspage />} />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>

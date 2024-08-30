@@ -1,5 +1,5 @@
 const AboutPage = () => {
-  return <div>AboutPage</div>;
+  return <div className="bg-yellow-300">AboutPage</div>;
 };
 
 export default AboutPage;
