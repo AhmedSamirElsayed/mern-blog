@@ -37,7 +37,9 @@ const MainHeader = () => {
         </Button>
 
         <Link to="/singin">
-          <Button gradientDuoTone="purpleToPink">Sign In</Button>
+          <Button gradientDuoTone="purpleToPink" outline>
+            Sign In
+          </Button>
         </Link>
         <Navbar.Toggle />
       </div>
