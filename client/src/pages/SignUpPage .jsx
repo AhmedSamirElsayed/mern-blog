@@ -1,9 +1,48 @@
 /* eslint-disable react/no-unescaped-entities */
-import { Button, Label, TextInput } from "flowbite-react";
+import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
+import { useState } from "react";
 import { AiFillGoogleCircle } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const SignUpPage = () => {
+  // state
+  const [formData, setFormData] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const navigate = useNavigate();
+  // function
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
+  };
+  // console.log(formData);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!formData.username || !formData.email || !formData.password) {
+      return setErrorMessage("please fill out all fields. ");
+    }
+    try {
+      setLoading(true);
+      setErrorMessage(null);
+      const res = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+      if (data.success === false) {
+        return setErrorMessage(data.message);
+      }
+      setLoading(false);
+      if (res.ok) {
+        navigate("/signin");
+      }
+    } catch (error) {
+      setErrorMessage(error.message);
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <div className="min-h-screen mt-20">
@@ -26,10 +65,15 @@ const SignUpPage = () => {
           </div>
           {/* {right side} */}
           <div className=" flex-1">
-            <form className="flex flex-col gap-4">
+            <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
               <div>
                 <Label value="Your username"></Label>
-                <TextInput type="text" placeholder="username" id="username" />
+                <TextInput
+                  type="text"
+                  placeholder="username"
+                  id="username"
+                  onChange={handleChange}
+                />
               </div>
               <div>
                 <Label value="Your Email"></Label>
@@ -37,6 +81,7 @@ const SignUpPage = () => {
                   type="email"
                   placeholder="name@company.com"
                   id="email"
+                  onChange={handleChange}
                 />
               </div>
               <div>
@@ -45,22 +90,39 @@ const SignUpPage = () => {
                   type="password"
                   placeholder="********"
                   id="password"
+                  onChange={handleChange}
                 />
               </div>
 
-              <Button gradientDuoTone="purpleToPink" type="submit">
-                Sign Up
+              <Button
+                gradientDuoTone="purpleToPink"
+                type="submit"
+                disabled={loading}
+              >
+                {loading ? (
+                  <>
+                    <Spinner size="sm" />
+                    <span className="pl-3">Loading...</span>
+                  </>
+                ) : (
+                  "Sign Up"
+                )}
               </Button>
               <Button gradientDuoTone="purpleToPink" outline>
                 <AiFillGoogleCircle /> continue with Google
               </Button>
-              <div className="flex gap-2 text-sm mt-5">
-                <span>Have an account?</span>
-                <Link to="/signin" className="text-blue-500">
-                  signin
-                </Link>
-              </div>
             </form>
+            <div className="flex gap-2 text-sm mt-5">
+              <span>Have an account?</span>
+              <Link to="/signin" className="text-blue-500">
+                signin
+              </Link>
+            </div>
+            {errorMessage && (
+              <Alert className="mt-5" color="failure">
+                {errorMessage}
+              </Alert>
+            )}
           </div>
         </div>
       </div>
