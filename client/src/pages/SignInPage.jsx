@@ -1,8 +1,51 @@
 /* eslint-disable react/no-unescaped-entities */
-import { Button, Label, TextInput } from "flowbite-react";
-import { Link } from "react-router-dom";
+import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
+import { useState } from "react";
+import { AiFillGoogleCircle } from "react-icons/ai";
+import { Link, useNavigate } from "react-router-dom";
 
 const SignInPage = () => {
+  // state
+  const [formData, setFormData] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const navigate = useNavigate();
+  // function
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
+  };
+  // console.log(formData);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!formData.email || !formData.password) {
+      return setErrorMessage("please fill out all fields. ");
+    }
+    try {
+      setLoading(true);
+      setErrorMessage(null);
+      const res = await fetch("/api/auth/signin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+      if (data.success === false) {
+        setErrorMessage(data.message);
+        setLoading(false);
+        return;
+      } else {
+        setLoading(false);
+        if (res.ok) {
+          navigate("/");
+        }
+      }
+    } catch (error) {
+      setErrorMessage(error.message);
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <div className="min-h-screen mt-20">
@@ -19,41 +62,61 @@ const SignInPage = () => {
               <b>•</b> Lorem ipsum dolor sit amet consectetur adipisicing elit.
               Minima <br />
               consequatur hic eaque autem cumque dolores optio voluptas ut
-              fugiat neque! <br /> <b>•</b> You can sign up with your email and
-              password or with Google.
+              fugiat neque! <br /> <b>•</b> You can <b>sign in</b> with your
+              email and password or with Google.
             </p>
           </div>
           {/* {right side} */}
           <div className=" flex-1">
-            <form className="flex flex-col gap-4">
+            <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
               <div>
-                <Label value="Enter Your Email"></Label>
+                <Label value="Your Email"></Label>
                 <TextInput
                   type="email"
                   placeholder="name@company.com"
                   id="email"
+                  onChange={handleChange}
                 />
               </div>
               <div>
-                <Label value="Enter Your password"></Label>
+                <Label value="Your password"></Label>
                 <TextInput
                   type="password"
                   placeholder="********"
                   id="password"
+                  onChange={handleChange}
                 />
               </div>
 
-              <Button gradientDuoTone="purpleToPink" type="submit">
-                Sign In
+              <Button
+                gradientDuoTone="purpleToPink"
+                type="submit"
+                disabled={loading}
+              >
+                {loading ? (
+                  <>
+                    <Spinner size="sm" />
+                    <span className="pl-3">Loading...</span>
+                  </>
+                ) : (
+                  "Sign In"
+                )}
               </Button>
-
-              <div className="flex gap-2 text-sm mt-5">
-                <span>Don't have an account?</span>
-                <Link to="/signup" className="text-blue-500">
-                  signup
-                </Link>
-              </div>
+              <Button gradientDuoTone="purpleToPink" outline>
+                <AiFillGoogleCircle /> continue with Google
+              </Button>
             </form>
+            <div className="flex gap-2 text-sm mt-5">
+              <span>Don't have an account</span>
+              <Link to="/signup" className="text-blue-500">
+                sign Up
+              </Link>
+            </div>
+            {errorMessage && (
+              <Alert className="mt-5" color="failure">
+                {errorMessage}
+              </Alert>
+            )}
           </div>
         </div>
       </div>

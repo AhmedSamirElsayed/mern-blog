@@ -31,11 +31,14 @@ const SignUpPage = () => {
 
       const data = await res.json();
       if (data.success === false) {
-        return setErrorMessage(data.message);
-      }
-      setLoading(false);
-      if (res.ok) {
-        navigate("/signin");
+        setErrorMessage(data.message);
+        setLoading(false);
+        return;
+      } else {
+        setLoading(false);
+        if (res.ok) {
+          navigate("/signin");
+        }
       }
     } catch (error) {
       setErrorMessage(error.message);
@@ -59,8 +62,8 @@ const SignUpPage = () => {
               <b>•</b> Lorem ipsum dolor sit amet consectetur adipisicing elit.
               Minima <br />
               consequatur hic eaque autem cumque dolores optio voluptas ut
-              fugiat neque! <br /> <b>•</b> You can sign up with your email and
-              password or with Google.
+              fugiat neque! <br /> <b>•</b> You can <b>sign up</b> with your
+              email and password or with Google.
             </p>
           </div>
           {/* {right side} */}
