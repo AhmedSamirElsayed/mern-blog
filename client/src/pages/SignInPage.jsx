@@ -55,6 +55,7 @@ const SignInPage = () => {
       // setErrorMessage(error.message);
       // setLoading(false);
       dispatch(signInFailure(error.message));
+      console.log(error.message);
     }
   };
 
