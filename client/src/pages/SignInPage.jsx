@@ -1,7 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import { useState } from "react";
-import { AiFillGoogleCircle } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -9,6 +8,7 @@ import {
   signInSuccess,
   signInFailure,
 } from "../redux/user/userSlice";
+import OAuthComponent from "../components/OAuthComponent";
 
 const SignInPage = () => {
   const dispatch = useDispatch();
@@ -115,9 +115,7 @@ const SignInPage = () => {
                   "Sign In"
                 )}
               </Button>
-              <Button gradientDuoTone="purpleToPink" outline>
-                <AiFillGoogleCircle /> continue with Google
-              </Button>
+              <OAuthComponent />
             </form>
             <div className="flex gap-2 text-sm mt-5">
               <span>Don't have an account</span>

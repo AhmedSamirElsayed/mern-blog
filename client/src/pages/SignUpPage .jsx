@@ -1,8 +1,8 @@
 /* eslint-disable react/no-unescaped-entities */
 import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import { useState } from "react";
-import { AiFillGoogleCircle } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
+import OAuthComponent from "../components/OAuthComponent";
 
 const SignUpPage = () => {
   // state
@@ -111,9 +111,7 @@ const SignUpPage = () => {
                   "Sign Up"
                 )}
               </Button>
-              <Button gradientDuoTone="purpleToPink" outline>
-                <AiFillGoogleCircle /> continue with Google
-              </Button>
+              <OAuthComponent />
             </form>
             <div className="flex gap-2 text-sm mt-5">
               <span>Have an account?</span>
