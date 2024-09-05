@@ -6,6 +6,7 @@ import SigninPage from "./pages/SignInPage";
 import SignUpPage from "./pages/SignUpPage ";
 import Projectspage from "./pages/Projectspage";
 import NotFoundPage from "./pages/NotFoundPage";
+import PrivateRoute from "./components/PrivateRoute";
 
 const MainRoutes = () => {
   return (
@@ -15,6 +16,9 @@ const MainRoutes = () => {
       <Route path="/dashboard" element={<DashboardPage />} />
       <Route path="/signin" element={<SigninPage />} />
       <Route path="/signup" element={<SignUpPage />} />
+      <Route path="/dashboard" element={<PrivateRoute />}>
+        <Route path="/dashboard" element={<DashboardPage />} />
+      </Route>
       <Route path="/projects" element={<Projectspage />} />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
