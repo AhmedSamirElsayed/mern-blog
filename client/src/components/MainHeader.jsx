@@ -1,13 +1,15 @@
 /* eslint-disable react/no-unescaped-entities */
-import { Button, Navbar, TextInput } from "flowbite-react";
+import { Avatar, Button, Dropdown, Navbar, TextInput } from "flowbite-react";
 import { Link, useLocation } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FaMoon } from "react-icons/fa";
+import { useSelector } from "react-redux";
 
 const MainHeader = () => {
   // const location = useLocation();
   // const path = location.pathname;
   const path = useLocation().pathname;
+  const currentUser = useSelector((state) => state.user);
 
   return (
     <Navbar className=" border-b-2 ">
@@ -36,11 +38,39 @@ const MainHeader = () => {
           <FaMoon />
         </Button>
 
-        <Link to="/signup">
-          <Button gradientDuoTone="purpleToPink" outline>
-            Sign Up
-          </Button>
-        </Link>
+        {currentUser.currentUser ? (
+          <Dropdown
+            arrowIcon={false}
+            inline
+            label={
+              <Avatar
+                alt="user"
+                img={currentUser?.currentUser?.profilePicture}
+                rounded
+              />
+            }
+          >
+            <Dropdown.Header>
+              <span className="block text-sm">
+                @{currentUser.currentUser?.username}
+              </span>
+              <span className="block text-sm font-medium truncate">
+                {currentUser.currentUser?.email}
+              </span>
+            </Dropdown.Header>
+            <Link to={"/dashboard?tab=profile"}>
+              <Dropdown.Item>Profile</Dropdown.Item>
+            </Link>
+            <Dropdown.Divider />
+            <Dropdown.Item>Sign Out</Dropdown.Item>
+          </Dropdown>
+        ) : (
+          <Link to="/signin">
+            <Button gradientDuoTone="purpleToPink" outline>
+              Sign In
+            </Button>
+          </Link>
+        )}
         <Navbar.Toggle />
       </div>
       <Navbar.Collapse>
