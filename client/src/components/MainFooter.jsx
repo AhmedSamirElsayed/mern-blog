@@ -13,7 +13,10 @@ import {
 const MainFooter = () => {
   return (
     <>
-      <Footer container className="border border-t-8 border-teal-500">
+      <Footer
+        container
+        className="border border-t-8 border-teal-500 fixed bottom-0"
+      >
         <div className="w-full max-w-7xl mx-auto">
           <div className="grid w-full justify-between sm:flex md:grid-cols-1">
             <div className="mt-5  border-b-2 border-amber-500 p-3 sm:border-none ">
