@@ -37,6 +37,19 @@ const DashProfile = () => {
     }
   };
 
+  // useEffect(() => {
+  //   const timeoutId = setTimeout(() => {
+  //     if (
+  //       imgeFile &&
+  //       typeof imgeFile === "object" &&
+  //       imgeFile.size < 2 * 1024 * 1024
+  //     ) {
+  //       uploadImage();
+  //     }
+  //   }, 500);
+
+  //   return () => clearTimeout(timeoutId);
+  // }, [imgeFile]);
   useEffect(() => {
     if (imgeFile) {
       uploadImage();
