@@ -125,7 +125,6 @@ const DashProfile = () => {
     }
     if (imageFileUploading) {
       setUpdateUserError("Please wait for image upload");
-
       return;
     }
     try {
