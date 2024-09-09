@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema(
     profilePicture: {
       type: String,
       default:
-        "https://www.google.com/imgres?q=profile%20image&imgurl=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F003%2F715%2F527%2Fnon_2x%2Fpicture-profile-icon-male-icon-human-or-people-sign-and-symbol-vector.jpg&imgrefurl=https%3A%2F%2Fwww.vecteezy.com%2Ffree-vector%2Fprofile-pic&docid=CsbR9dJYuOywhM&tbnid=3nPRi6_QfknfYM&vet=12ahUKEwieyeLLv6qIAxWJiv0HHfUhJpsQM3oECBYQAA..i&w=980&h=980&hcb=2&ved=2ahUKEwieyeLLv6qIAxWJiv0HHfUhJpsQM3oECBYQAA",
+        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
     },
   },
   { timestamps: true }

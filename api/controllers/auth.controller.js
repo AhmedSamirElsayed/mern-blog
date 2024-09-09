@@ -2,6 +2,7 @@ import User from "../models/user.model.js";
 import bcryptjs from "bcryptjs";
 import { errorHandelar } from "../utils/error.js";
 import jwt from "jsonwebtoken";
+import { generateUserToken } from "../utils/processOnUserToken.js";
 
 export const signup = async (req, res, next) => {
   const { username, email, password } = req.body;
@@ -51,7 +52,8 @@ export const signin = async (req, res, next) => {
     }
 
     // if user valid generate token to send it with respons in cookie . to auth user
-    const token = jwt.sign({ userId: validUser._id }, process.env.JWT_SECRT);
+    // const token = jwt.sign({ userId: validUser._id }, process.env.JWT_SECRT);
+    const token = generateUserToken(validUser._id);
     // Exclude the password from the response
     const { password: pass, ...rest } = validUser._doc;
 
@@ -70,6 +72,7 @@ export const signin = async (req, res, next) => {
   }
 };
 
+// log in or register with google account with using firebase.
 export const google = async (req, res, next) => {
   const { email, name, googlePhotoURL } = req.body;
   try {
