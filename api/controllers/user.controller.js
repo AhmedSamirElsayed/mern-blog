@@ -59,3 +59,19 @@ export const updateUserInfo = async (req, res, next) => {
     next(error);
   }
 };
+
+// delete user information api
+export const deleteUser = async (req, res, next) => {
+  if (req.user.userId !== req.params.userId) {
+    return next(
+      errorHandelar(403, "you are not allow to delete this user account ")
+    );
+  }
+
+  try {
+    await User.findByIdAndDelete(req.params.userId);
+    res.status(200).json({ message: "User delete successfully" });
+  } catch (error) {
+    next(error);
+  }
+};
