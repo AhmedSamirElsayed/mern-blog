@@ -6,6 +6,7 @@ export const testAPI = (req, res) => {
   res.json({ message: "api response for you as async is working" });
 };
 
+// update user information api
 export const updateUserInfo = async (req, res, next) => {
   if (req.user.userId !== req.params.userId) {
     return next(errorHandelar(403, "Forbidden"));
