@@ -5,7 +5,7 @@ import { AiOutlineSearch } from "react-icons/ai";
 import { FaMoon, FaSun } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleTheme } from "../redux/theme/themeSlice";
-
+import { SignoutFun } from "../assets/signout.js";
 const MainHeader = () => {
   // const location = useLocation();
   // const path = location.pathname;
@@ -13,6 +13,10 @@ const MainHeader = () => {
   const { currentUser } = useSelector((state) => state.user);
   const { theme } = useSelector((state) => state.theme);
   const dispatch = useDispatch();
+
+  const handleSignOut = () => {
+    SignoutFun(dispatch);
+  };
 
   return (
     <Navbar className=" border-b-2 ">
@@ -66,7 +70,7 @@ const MainHeader = () => {
               <Dropdown.Item>Profile</Dropdown.Item>
             </Link>
             <Dropdown.Divider />
-            <Dropdown.Item>Sign Out</Dropdown.Item>
+            <Dropdown.Item onClick={handleSignOut}>Sign Out</Dropdown.Item>
           </Dropdown>
         ) : (
           <Link to="/signin">
