@@ -3,9 +3,10 @@ import { Link, useLocation } from "react-router-dom";
 import { Sidebar } from "flowbite-react";
 import { HiArrowSmRight, HiUser } from "react-icons/hi";
 import { SignoutFun } from "../assets/signout";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const DashSidebar = () => {
+  const { currentUser } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const location = useLocation();
   const [tab, setTab] = useState("");
@@ -39,7 +40,7 @@ const DashSidebar = () => {
             to="/dashboard?tab=profile"
             active={tab === "profile"}
             icon={HiUser}
-            label="User"
+            label={currentUser.isAdmin ? "Admin" : "User"}
             labelColor={"dark"}
           >
             Profile

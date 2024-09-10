@@ -7,6 +7,8 @@ import SignUpPage from "./pages/SignUpPage ";
 import Projectspage from "./pages/Projectspage";
 import NotFoundPage from "./pages/NotFoundPage";
 import PrivateRoute from "./components/PrivateRoute";
+import OnlyAdminPrivateRoute from "./components/OnlyAdminPrivateRoute";
+import CreatePost from "./pages/CreatePost";
 
 const MainRoutes = () => {
   return (
@@ -18,6 +20,9 @@ const MainRoutes = () => {
       <Route path="/signup" element={<SignUpPage />} />
       <Route path="/dashboard" element={<PrivateRoute />}>
         <Route path="/dashboard" element={<DashboardPage />} />
+      </Route>
+      <Route path="/create-post" element={<OnlyAdminPrivateRoute />}>
+        <Route path="/create-post" element={<CreatePost />} />
       </Route>
       <Route path="/projects" element={<Projectspage />} />
       <Route path="*" element={<NotFoundPage />} />
