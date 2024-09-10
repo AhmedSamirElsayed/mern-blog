@@ -1,8 +1,11 @@
 import jwt from "jsonwebtoken";
 import { errorHandelar } from "./error.js";
 
-const generateUserToken = (id) => {
-  const token = jwt.sign({ userId: id }, process.env.JWT_SECRT);
+const generateUserToken = (validUser) => {
+  const token = jwt.sign(
+    { userId: validUser._id, isAdmin: validUser.isAdmin },
+    process.env.JWT_SECRT
+  );
   return token;
 };
 

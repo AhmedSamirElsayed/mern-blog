@@ -53,7 +53,7 @@ export const signin = async (req, res, next) => {
 
     // if user valid generate token to send it with respons in cookie . to auth user
     // const token = jwt.sign({ userId: validUser._id }, process.env.JWT_SECRT);
-    const token = generateUserToken(validUser._id);
+    const token = generateUserToken(validUser);
     // Exclude the password from the response
     const { password: pass, ...rest } = validUser._doc;
 
@@ -78,7 +78,8 @@ export const google = async (req, res, next) => {
   try {
     const user = await User.findOne({ email });
     if (user) {
-      const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRT);
+      // const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRT);
+      const token = generateUserToken(user);
       const { password, ...rest } = user._doc;
       res
         .status(200)
@@ -98,8 +99,9 @@ export const google = async (req, res, next) => {
         profilePicture: googlePhotoURL,
       });
       await newUser.save();
-      const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRT);
-      const { password, ...rest } = user._doc;
+      // const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRT);
+      const token = generateUserToken(newUser);
+      const { password, ...rest } = newUser._doc;
       res
         .status(200)
         .cookie("access_token", token, { httpOnly: true })
