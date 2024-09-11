@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Sidebar } from "flowbite-react";
-import { HiArrowSmRight, HiUser } from "react-icons/hi";
+import { HiArrowSmRight, HiDocumentText, HiUser } from "react-icons/hi";
 import { SignoutFun } from "../assets/signout";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -24,17 +24,7 @@ const DashSidebar = () => {
   return (
     <Sidebar className="w-full md:w-56">
       <Sidebar.Items>
-        <Sidebar.ItemGroup>
-          {/* <Link to="/dashboard?tab=profile">
-            <Sidebar.Item
-              active={tab === "profile"}
-              icon={HiUser}
-              label="User"
-              labelColor={"dark"}
-            >
-              Profile
-            </Sidebar.Item>
-          </Link> */}
+        <Sidebar.ItemGroup className="flex flex-col gap-1">
           <Sidebar.Item
             as={Link}
             to="/dashboard?tab=profile"
@@ -45,8 +35,19 @@ const DashSidebar = () => {
           >
             Profile
           </Sidebar.Item>
+          {currentUser.isAdmin && (
+            <Link to="/dashboard?tab=posts">
+              <Sidebar.Item
+                as="div"
+                active={tab === "posts"}
+                icon={HiDocumentText}
+              >
+                Posts
+              </Sidebar.Item>
+            </Link>
+          )}
+
           <Sidebar.Item
-            active
             icon={HiArrowSmRight}
             className="cursor-pointer"
             onClick={handleSignOut}
