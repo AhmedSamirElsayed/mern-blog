@@ -37,9 +37,17 @@ export const getALLposts = async (req, res, next) => {
   try {
     const startIndex = parseInt(req.query.startIndex) || 0;
     const limit = parseInt(req.query.limit) || 9;
-    const sorteDirection = req.query.order === "asc" ? 1 : -1;
-    const posts = await Post.find({
-      ...(req.query.userId && { userId: req.query.userId }),
+    const sortDirection = req.query.order === "asc" ? 1 : -1;
+
+    const Now = new Date();
+    const oneMonthAgo = new Date(
+      Now.getFullYear(),
+      Now.getMonth() - 1,
+      Now.getDate()
+    );
+
+    const filters = {
+      ...(req.query.userId && { _id: req.query.userId }),
       ...(req.query.category && { category: req.query.category }),
       ...(req.query.slug && { slug: req.query.slug }),
       ...(req.query.postId && { _id: req.query.postId }),
@@ -49,19 +57,13 @@ export const getALLposts = async (req, res, next) => {
           { content: { $regex: req.query.searchTerm, $options: "i" } },
         ],
       }),
-    })
-      .sort({ updateAt: sorteDirection })
+    };
+
+    const posts = await Post.find(filters)
+      .sort({ updatedAt: sortDirection })
       .skip(startIndex)
       .limit(limit);
-
     const totalPosts = await Post.countDocuments();
-    const Now = new Date();
-    const oneMonthAgo = new Date(
-      Now.getFullYear(),
-      Now.getMonth(),
-      Now.getDate()
-    );
-
     const lastMonthPosts = await Post.countDocuments({
       createdAt: { $gte: oneMonthAgo },
     });
