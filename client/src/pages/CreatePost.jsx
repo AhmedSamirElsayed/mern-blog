@@ -1,5 +1,7 @@
 import { Alert, Button, FileInput, Select, TextInput } from "flowbite-react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import {
@@ -13,14 +15,17 @@ import { CircularProgressbar } from "react-circular-Progressbar";
 import "react-circular-progressbar/dist/styles.css";
 
 const CreatePost = () => {
+  const navigate = useNavigate();
   const [file, setFile] = useState(null);
   const [imageUploadProgess, setImageUploadProgess] = useState(null);
   const [imageUploadError, setImageUploadError] = useState(null);
   const [formData, setFormData] = useState({});
+  const [publishError, setPublishError] = useState(null);
 
   // console.log(imageUploadProgess);
   // console.log(imageUploadError);
 
+  // handle funcion
   const handleUploadImage = async () => {
     try {
       if (!file) {
@@ -57,6 +62,33 @@ const CreatePost = () => {
       console.log(error);
     }
   };
+
+  const handlePuplishPost = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch("/api/post/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        setPublishError(data.message);
+        return;
+      } else if (data.success === false) {
+        setPublishError(data.message);
+        return;
+      } else if (res.ok) {
+        setPublishError(null);
+        navigate(`/post/${data.slug}`);
+      }
+    } catch (error) {
+      setPublishError(error.message);
+    }
+  };
   return (
     <div className="p-3 max-w-3xl mx-auto min-h-screen">
       <h1 className="text-center text-3xl my-7 font-semibold">Create a post</h1>
@@ -68,8 +100,15 @@ const CreatePost = () => {
             id="title"
             placeholder="Title"
             className="flex-1"
+            onChange={(e) => {
+              setFormData({ ...formData, title: e.target.value });
+            }}
           />
-          <Select>
+          <Select
+            onChange={(e) => {
+              setFormData({ ...formData, category: e.target.value });
+            }}
+          >
             <option value="uncategorized" hidden>
               Select a category
             </option>
@@ -121,10 +160,24 @@ const CreatePost = () => {
           placeholder="Write something....."
           className="h-72 mb-12"
           required
+          onChange={(value) => {
+            setFormData({ ...formData, content: value });
+          }}
         />
-        <Button type="submit" gradientDuoTone="purpleToPink">
+        <Button
+          type="submit"
+          gradientDuoTone="purpleToPink"
+          onClick={(e) => {
+            handlePuplishPost(e);
+          }}
+        >
           Puplish
         </Button>
+        {publishError && (
+          <Alert color="failure" className="mt-5">
+            {publishError}
+          </Alert>
+        )}
       </form>
     </div>
   );
