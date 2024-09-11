@@ -1,5 +1,7 @@
+import { Table } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const DashPosts = () => {
   const { currentUser } = useSelector((state) => state.user);
@@ -25,28 +27,60 @@ const DashPosts = () => {
     if (currentUser?.isAdmin) {
       fetchPosts();
     }
-  }, [currentUser]);
+  }, [currentUser?._id, currentUser?.isAdmin]);
 
   return (
-    <div className="h-screen bg-yellow-100 text-center w-full text-black">
+    <div className="table-auto overflow-x-scroll md:mx-auto p-3">
       {error ? (
         <p>Error: {error}</p>
+      ) : currentUser?.isAdmin && userposts.length > 0 ? (
+        <Table hoverable className="shadow-md">
+          <Table.Head>
+            <Table.HeadCell>Post Updated</Table.HeadCell>
+            <Table.HeadCell>Post Image</Table.HeadCell>
+            <Table.HeadCell>Post Title</Table.HeadCell>
+            <Table.HeadCell>Post Category</Table.HeadCell>
+            <Table.HeadCell>Delete</Table.HeadCell>
+            <Table.HeadCell>Edit</Table.HeadCell>
+          </Table.Head>
+          <Table.Body className="divide-y">
+            {userposts.map((post) => (
+              <Table.Row
+                key={post._id}
+                className="bg-white dark:border-gray-700 dark:bg-gray-800"
+              >
+                <Table.Cell>
+                  {new Date(post.updatedAt).toLocaleString()}
+                </Table.Cell>
+                <Table.Cell>
+                  <Link to={`/post/${post.slug}`}>
+                    <img
+                      src={post.image}
+                      alt={post.title}
+                      className="w-20 h-20 object-cover bg-gray-500"
+                    />
+                  </Link>
+                </Table.Cell>
+                <Table.Cell className="font-medium text-gray-900 dark:text-white">
+                  {post.title}
+                </Table.Cell>
+                <Table.Cell>{post.category}</Table.Cell>
+                <Table.Cell>
+                  <button className="text-red-500 font-medium hover:underline">
+                    Delete
+                  </button>
+                </Table.Cell>
+                <Table.Cell>
+                  <Link to={`/update-post/${post._id}`}>
+                    <button className="text-teal-500">Edit</button>
+                  </Link>
+                </Table.Cell>
+              </Table.Row>
+            ))}
+          </Table.Body>
+        </Table>
       ) : (
-        <>
-          <h1>DashPosts</h1>
-          {userposts.length > 0 ? (
-            <ul>
-              {userposts.map((post) => (
-                <>
-                  <li key={post._id}>{post.title}</li>
-                  <li>{post.content}</li>
-                </>
-              ))}
-            </ul>
-          ) : (
-            <p>No posts available</p>
-          )}
-        </>
+        <p>You have no posts yet!!</p>
       )}
     </div>
   );
