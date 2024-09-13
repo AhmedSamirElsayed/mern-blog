@@ -92,3 +92,70 @@ export const deletepost = async (req, res, next) => {
     next(error);
   }
 };
+
+// export const updatePost = async (req, res, next) => {
+//   if (!req.user.isAdmin || req.user.userId !== req.params.userId) {
+//     return next(
+//       errorHandelar(403, "you are not allowed for you to update this post .")
+//     );
+//   }
+
+//   try {
+//     const updatedPost = await Post.findByIdAndUpdate(
+//       req.params.postId,
+//       {
+//         $set: {
+//           title: req.body.title,
+//           content: req.body.conten,
+//           category: req.body.category,
+//           image: req.body.image,
+//         },
+//       },
+//       { new: true }
+//     );
+//     res
+//       .status(200)
+//       .json(updatedPost, "The post has been updated successfully.");
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
+export const updatePost = async (req, res, next) => {
+  // Check if the user is authorized to update the post
+  if (!req.user.isAdmin || req.user.userId !== req.params.userId) {
+    return next(
+      errorHandelar(403, "You are not authorized to update this post.")
+    );
+  }
+
+  try {
+    // Update the post with the provided details
+    const updatedPost = await Post.findByIdAndUpdate(
+      req.params.postId,
+      {
+        $set: {
+          title: req.body.title,
+          content: req.body.content, // Fixed typo: "conten" to "content"
+          category: req.body.category,
+          image: req.body.image,
+        },
+      },
+      { new: true } // Return the updated post
+    );
+
+    // Check if post was found and updated
+    if (!updatedPost) {
+      return next(errorHandler(404, "Post not found."));
+    }
+
+    // Send success response
+    res.status(200).json({
+      message: "The post has been updated successfully.",
+      post: updatedPost,
+    });
+  } catch (error) {
+    // Handle any errors that occurred during the update
+    next(error);
+  }
+};
