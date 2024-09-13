@@ -12,8 +12,6 @@ const DashPosts = () => {
   const [postIdToDelete, setPostIdToDelete] = useState("");
   const [error, setError] = useState(null);
 
-  console.log(postIdToDelete);
-
   useEffect(() => {
     const fetchPosts = async () => {
       try {
@@ -22,11 +20,9 @@ const DashPosts = () => {
 
         if (res.ok) {
           setUserPosts(data.posts);
-          if (data.posts.length < 9) {
-            setShowMore(false);
-          }
-        } else {
-          throw new Error(data.message || "Failed to fetch posts");
+        }
+        if (data.posts.length < 9) {
+          setShowMore(false);
         }
       } catch (error) {
         setError(error.message);
@@ -45,7 +41,7 @@ const DashPosts = () => {
     const startIndex = userposts.length;
     try {
       const res = await fetch(
-        `/api/post/getPosts?_id=${currentUser._id}&startIndex=${startIndex}`
+        `/api/post/getposts?_id=${currentUser._id}&startIndex=${startIndex}`
       );
       const data = await res.json();
       if (res.ok) {
